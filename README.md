@@ -1,6 +1,6 @@
 # LET Telegram Bot
 
-抓取 LowEndTalk offers，新帖经 AI 结构化后推送到 Telegram 频道。
+抓取 LowEndTalk offers，当日24h新帖经 AI 结构化后推送到您前端或.env Telegram 频道。
 
 ## 配置
 
