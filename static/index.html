@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LET Bot Admin</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <section id="loginView" class="login-view">
+      <form id="loginForm" class="login-card">
+        <div class="brand-mark">LET</div>
+        <h1>LET Bot 管理台</h1>
+        <p>管理员账号。Telegram Bot账号登录，默认用户名。(用户名: admin)</p>
+        <label class="icon-field">
+          <span>管理员账号</span>
+          <div>
+            <span class="field-icon">ID</span>
+            <input id="loginUsername" autocomplete="username" placeholder="admin" value="admin">
+          </div>
+        </label>
+        <label class="icon-field">
+          <span>管理员密码</span>
+          <div>
+            <span class="field-icon">PW</span>
+            <input id="loginPassword" type="password" autocomplete="current-password" placeholder="请输入密码">
+          </div>
+        </label>
+        <button type="submit">登录</button>
+        <a class="forgot-link" href="#" aria-disabled="true">Forgot Password?</a>
+        <div id="loginStatus" class="status"></div>
+        <footer>2024 LET Bot. All Rights Reserved.</footer>
+      </form>
+    </section>
+
+    <section id="adminView" class="admin-view" hidden>
+      <section class="topbar">
+        <div>
+          <h1>LET Bot 管理台</h1>
+          <p>配置大模型供应商、中转商 KEY，并查看运行日志。</p>
+        </div>
+        <button id="logoutBtn" type="button" class="secondary">退出登录</button>
+      </section>
+
+      <section class="grid">
+        <div class="stack">
+          <form id="modelForm" class="panel">
+            <div class="panel-head">
+              <h2>模型配置</h2>
+              <button type="submit">保存模型配置</button>
+            </div>
+
+            <label>
+              供应商
+              <select name="AI_PROVIDER" id="provider">
+                <option value="SiliconFlow">SiliconFlow</option>
+                <option value="OpenRouter">OpenRouter</option>
+                <option value="One API / New API">One API / New API</option>
+                <option value="LiteLLM">LiteLLM</option>
+                <option value="Custom">自定义中转</option>
+              </select>
+            </label>
+
+            <label>
+              API Base URL
+              <input name="AI_BASE_URL" id="baseUrl" placeholder="https://api.siliconflow.cn/v1">
+            </label>
+
+            <label>
+              API KEY
+              <input name="AI_API_KEY" type="password" autocomplete="off" placeholder="留空表示不修改">
+            </label>
+
+            <div class="two-col">
+              <label>
+                主模型
+                <input name="AI_MODEL" placeholder="Qwen/Qwen2.5-7B-Instruct">
+              </label>
+              <label>
+                备用模型
+                <input name="AI_MODEL_FALLBACKS" placeholder="Qwen/Qwen3-8B">
+              </label>
+            </div>
+
+            <div class="two-col">
+              <label>
+                超时秒数
+                <input name="AI_TIMEOUT" type="number" min="5" step="1" placeholder="45">
+              </label>
+              <label>
+                AI 重试
+                <input name="AI_MAX_RETRIES" type="number" min="0" step="1" placeholder="0">
+              </label>
+            </div>
+
+            <div class="two-col">
+              <label>
+                扫描最小秒数
+                <input name="SCAN_INTERVAL_MIN" type="number" min="30" step="1" placeholder="90">
+              </label>
+              <label>
+                扫描最大秒数
+                <input name="SCAN_INTERVAL_MAX" type="number" min="30" step="1" placeholder="180">
+              </label>
+            </div>
+
+            <label>
+              风控冷却秒数
+              <input name="BLOCKED_SLEEP_SECONDS" type="number" min="60" step="1" placeholder="1800">
+            </label>
+            <div id="modelStatus" class="status"></div>
+          </form>
+
+          <form id="telegramForm" class="panel">
+            <div class="panel-head">
+              <h2>Telegram 配置</h2>
+              <button type="submit">保存 Telegram 配置</button>
+            </div>
+            <label>
+              Bot Token
+              <input name="TG_BOT_TOKEN" type="password" autocomplete="off" placeholder="留空表示不修改">
+            </label>
+            <label>
+              Chat ID
+              <input name="TG_CHAT_ID" placeholder="@channel 或数字 ID">
+            </label>
+            <div id="telegramStatus" class="status"></div>
+          </form>
+        </div>
+
+        <section class="panel logs-panel">
+          <div class="panel-head">
+            <h2>运行日志</h2>
+            <div class="actions">
+              <button id="refreshLogs" type="button">刷新</button>
+              <button id="clearLogs" class="danger" type="button">清空日志</button>
+            </div>
+          </div>
+          <div class="terminal-shell">
+            <div class="terminal-bar">
+              <span></span>
+              <span></span>
+              <span></span>
+              <strong>runtime.log</strong>
+            </div>
+            <pre id="logs">加载中...</pre>
+          </div>
+          <div id="logsStatus" class="status"></div>
+        </section>
+      </section>
+    </section>
+
+    <div id="toast" role="status"></div>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
