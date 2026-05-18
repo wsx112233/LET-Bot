@@ -1,0 +1,41 @@
+services:
+  let_bot:
+    build: .
+    image: let_bot:local
+    container_name: let_bot_engine
+    restart: always
+    environment:
+      TZ: ${TZ:-UTC}
+      AI_BASE_URL: ${AI_BASE_URL:-https://api.siliconflow.cn/v1}
+      AI_MODEL: ${AI_MODEL:-Qwen/Qwen2.5-7B-Instruct}
+      AI_MODEL_FALLBACKS: ${AI_MODEL_FALLBACKS:-Qwen/Qwen3-8B}
+      AI_TIMEOUT: ${AI_TIMEOUT:-45}
+      AI_MAX_RETRIES: ${AI_MAX_RETRIES:-0}
+      AI_CONTENT_LIMIT: ${AI_CONTENT_LIMIT:-8000}
+      SCAN_INTERVAL_MIN: ${SCAN_INTERVAL_MIN:-90}
+      SCAN_INTERVAL_MAX: ${SCAN_INTERVAL_MAX:-180}
+      BLOCKED_SLEEP_SECONDS: ${BLOCKED_SLEEP_SECONDS:-1800}
+      TG_PARSE_MODE: ${TG_PARSE_MODE:-MarkdownV2}
+      TG_DISABLE_WEB_PREVIEW: ${TG_DISABLE_WEB_PREVIEW:-true}
+    volumes:
+      - /opt/let/data:/app/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  let_admin:
+    build: .
+    image: let_bot:local
+    container_name: let_bot_admin
+    restart: always
+    command: python -m uvicorn admin_app:app --host 0.0.0.0 --port 2918
+    environment:
+      TZ: ${TZ:-UTC}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+    volumes:
+      - /opt/let/data:/app/data
+    ports:
+      - "${ADMIN_HOST:-127.0.0.1}:${ADMIN_PORT:-2918}:2918"
